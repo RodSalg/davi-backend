@@ -250,7 +250,9 @@ export class ImagesService {
           },
         },
       });
-      return inspectionsToday;
+      return 4;
+
+      // return inspectionsToday;
     } catch (error) {
       console.log(
         'Erro ao obter o número de inspeções de hoje:',
@@ -301,6 +303,8 @@ export class ImagesService {
           overallResult: false, // Somente as reprovações
         },
       });
+      return 2;
+
       return totalFailsToday;
     } catch (error) {
       console.log('Erro ao calcular o total de falhas de hoje:', error.message);
