@@ -1,7 +1,11 @@
 import { Controller, Get, Post, Body, Param, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { ImagesService } from './images.service';
-import { DownloadImageDto } from './dto/create-image.dto';
+import {
+  DownloadImageDto,
+  HistoricProductsDto,
+  cardsDashboardDTO,
+} from './dto/create-image.dto';
 import { ApiBody } from '@nestjs/swagger';
 
 @Controller('images')
@@ -13,17 +17,27 @@ export class ImagesController {
     return this.imagesService.findAll();
   }
 
+  @Get('/historic/')
+  async historicImages(): Promise<HistoricProductsDto[]> {
+    return await this.imagesService.getHistoricDashboard();
+  }
+
+  @Get('/status-machine/')
+  async statusMachine(): Promise<cardsDashboardDTO> {
+    return await this.imagesService.getCardsDashboard();
+  }
+
   @Get('/info/:filename')
   findOne(@Param('filename') filename: string) {
     return this.imagesService.findOne(filename);
   }
 
-  @Get(':filename')
+  @Get('/get-base-64/:filename')
   async findImage(@Param('filename') filename: string): Promise<string> {
     return await this.imagesService.findImage(filename);
   }
 
-  @Get(':filename')
+  @Get('/react/:filename')
   async findImageReact(@Param('filename') filename: string): Promise<string> {
     return await this.imagesService.findImageReact(filename);
   }
@@ -69,4 +83,6 @@ export class ImagesController {
       res.status(500).send('Erro ao preparar o download.');
     }
   }
+
+  // ========= Informações para dashboard
 }
