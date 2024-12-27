@@ -6,9 +6,11 @@ import { ImagesModule } from './images/images.module';
 import { InspectionsModule } from './inspections/inspections.module';
 import { PassConditionsModule } from './pass-conditions/pass-conditions.module';
 import { ImageResultsModule } from './image-results/image-results.module';
+import { ManualDefectClassificationModule } from './manual-defect-classification/manual-defect-classification.module';
+import { ReleasesModule } from './releases/releases.module';
 
 @Module({
-  imports: [ProductsModule, ImageResultsModule, ImagesModule, InspectionsModule, PassConditionsModule],
+  imports: [ProductsModule, ImageResultsModule, ImagesModule, InspectionsModule, PassConditionsModule, ManualDefectClassificationModule, ReleasesModule],
   controllers: [AppController],
   providers: [AppService],
 })

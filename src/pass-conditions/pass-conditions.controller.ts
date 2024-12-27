@@ -17,18 +17,8 @@ export class PassConditionsController {
     return this.passConditionsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.passConditionsService.findOne(+id);
-  }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePassConditionDto: UpdatePassConditionDto) {
-    return this.passConditionsService.update(+id, updatePassConditionDto);
-  }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.passConditionsService.remove(+id);
-  }
+
+
 }

@@ -1,34 +1,72 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { ImagesService } from './images.service';
-import { CreateImageDto } from './dto/create-image.dto';
-import { UpdateImageDto } from './dto/update-image.dto';
+import { DownloadImageDto } from './dto/create-image.dto';
+import { ApiBody } from '@nestjs/swagger';
 
 @Controller('images')
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
-
-  @Post()
-  create(@Body() createImageDto: CreateImageDto) {
-    return this.imagesService.create(createImageDto);
-  }
 
   @Get()
   findAll() {
     return this.imagesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.imagesService.findOne(+id);
+  @Get('/info/:filename')
+  findOne(@Param('filename') filename: string) {
+    return this.imagesService.findOne(filename);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateImageDto: UpdateImageDto) {
-    return this.imagesService.update(+id, updateImageDto);
+  @Get(':filename')
+  async findImage(@Param('filename') filename: string): Promise<string> {
+    return await this.imagesService.findImage(filename);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.imagesService.remove(+id);
+  @Get(':filename')
+  async findImageReact(@Param('filename') filename: string): Promise<string> {
+    return await this.imagesService.findImageReact(filename);
+  }
+
+  @Post('download')
+  @ApiBody({
+    description: 'Base64 string of the image and desired filename',
+    type: DownloadImageDto,
+    examples: {
+      example1: {
+        summary: 'Exemplo válido',
+        description: 'Um exemplo de string Base64 e nome de arquivo.',
+        value: {
+          base64: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...',
+          filename: 'example.png',
+        },
+      },
+    },
+  })
+  async downloadImage(
+    @Body() downloadImageDto: DownloadImageDto,
+    @Res() res: Response,
+  ): Promise<void> {
+    const { base64, filename } = downloadImageDto;
+
+    try {
+      // Converte Base64 para um buffer de arquivo
+      const fileBuffer = await this.imagesService.convertBase64ToImageFile(
+        base64,
+        filename,
+      );
+
+      // Configura o cabeçalho para download
+      res.set({
+        'Content-Type': 'application/octet-stream',
+        'Content-Disposition': `attachment; filename=${filename}`,
+      });
+
+      // Envia o buffer para o cliente
+      res.send(fileBuffer);
+    } catch (error) {
+      console.error('Erro ao preparar o download:', error.message);
+      res.status(500).send('Erro ao preparar o download.');
+    }
   }
 }

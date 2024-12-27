@@ -1,26 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { CreateInspectionDto } from './dto/create-inspection.dto';
 import { UpdateInspectionDto } from './dto/update-inspection.dto';
+import { prisma } from 'src/main';
 
 @Injectable()
 export class InspectionsService {
-  create(createInspectionDto: CreateInspectionDto) {
-    return 'This action adds a new inspection';
+  async findAll() {
+    return await prisma.inspections.findMany();
   }
 
-  findAll() {
-    return `This action returns all inspections`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} inspection`;
-  }
-
-  update(id: number, updateInspectionDto: UpdateInspectionDto) {
-    return `This action updates a #${id} inspection`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} inspection`;
+  async findOne(id: string) {
+    return await prisma.inspections.findUnique({
+      where: { id: id },
+    });
   }
 }

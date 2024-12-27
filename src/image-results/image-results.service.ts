@@ -1,26 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { CreateImageResultDto } from './dto/create-image-result.dto';
 import { UpdateImageResultDto } from './dto/update-image-result.dto';
+import { prisma } from 'src/main';
 
 @Injectable()
 export class ImageResultsService {
-  create(createImageResultDto: CreateImageResultDto) {
-    return 'This action adds a new imageResult';
+
+
+  async findAll() {
+    return await prisma.image_Results.findMany();
   }
 
-  findAll() {
-    return `This action returns all imageResults`;
+  async findOne(id: number) {
+    return await prisma.image_Results.findUnique({
+      where: { id: id }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} imageResult`;
+  async search(id: number) {
+    return await prisma.image_Results.findUnique({
+      where: { id: id }
+    });
   }
 
-  update(id: number, updateImageResultDto: UpdateImageResultDto) {
-    return `This action updates a #${id} imageResult`;
-  }
 
-  remove(id: number) {
-    return `This action removes a #${id} imageResult`;
-  }
 }

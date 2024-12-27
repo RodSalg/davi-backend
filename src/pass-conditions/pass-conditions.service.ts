@@ -12,15 +12,9 @@ export class PassConditionsService {
     return `This action returns all passConditions`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} passCondition`;
-  }
 
-  update(id: number, updatePassConditionDto: UpdatePassConditionDto) {
-    return `This action updates a #${id} passCondition`;
-  }
 
-  remove(id: number) {
-    return `This action removes a #${id} passCondition`;
-  }
+
+
+
 }
